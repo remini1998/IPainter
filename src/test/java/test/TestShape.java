@@ -1,7 +1,7 @@
 package test;
 
 import models.*;
-import models.Rectangle;
+import models.Polygon;
 
 import java.awt.*;
 
@@ -17,8 +17,8 @@ public class TestShape {
         g.add(new Circle(Color.BLUE, 1, 6,7, 5));
 
         // 两种构造方式
-        g.add(new Rectangle(Color.BLUE, 1, new MyPoint(6,3), 5, 9));
-        g.add(new Rectangle(Color.BLUE, 1, 4,7, 5, 8));
+        g.add(new Polygon(Color.BLUE, 1, new MyPoint(6,3), 5, 9));
+        g.add(new Polygon(Color.BLUE, 1, 4,7, 5, 8));
 
         System.out.println(g.toString());// 打印
 

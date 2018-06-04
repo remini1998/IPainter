@@ -1,12 +1,17 @@
 package models;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import controllers.JsonController;
+
 import java.awt.*;
 import java.util.Vector;
+import java.util.function.Consumer;
 
 //组合模式
 public class Group extends Shape {
-    protected String name = "Group";
-    public Vector<Shape> shapes = new Vector<Shape>();
+    protected static String name = "Group";
+    private Vector<Shape> shapes = new Vector<Shape>();
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for(Shape s: shapes){
@@ -44,5 +49,46 @@ public class Group extends Shape {
 
     public void add(Shape s){
         shapes.add(s);
+    }
+
+    public void remove(Shape s){
+        shapes.remove(s);
+    }
+
+    public Shape get(int index){
+        ;return shapes.get(index);
+    }
+
+    public int size(){
+        ;return shapes.size();
+    }
+
+    public void forEach(Consumer<? super Shape> func){
+        shapes.forEach(func);
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type", Group.name);
+        JsonArray jShapes = JsonController.toJson((Shape[]) shapes.toArray());
+        json.add("shapes", jShapes);
+        return json;
+    }
+
+    public static Group parseFromJsonFactory(JsonObject json){
+        if (!json.get("type").getAsString().equals(Group.name)){
+            return null;
+        }
+        Group g = new Group();
+        JsonArray jShapes = json.get("shapes").getAsJsonArray();
+        jShapes.forEach(j -> {
+            try {
+                g.add(JsonController.travel(j.getAsJsonObject()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return g;
     }
 }

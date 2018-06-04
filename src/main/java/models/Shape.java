@@ -1,13 +1,16 @@
 package models;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import controllers.Controller;
 import models.interfaces.IOperatable;
+import models.interfaces.ISerialized;
 
 import java.awt.*;
 import java.util.Collections;
 import java.util.Vector;
 
-public abstract class Shape implements IOperatable {
+public abstract class Shape implements IOperatable, ISerialized {
 
     private Color color;
     // 小于等于0为填充模式
@@ -15,17 +18,17 @@ public abstract class Shape implements IOperatable {
     // 视图控制器，组合模式
     public Controller controller;
     // toString时显示的名字
-    protected String name = "Shape";
+    protected static String name = "Shape";
     // 点集合
-    protected Vector<MyPoint> myPoints = new Vector<MyPoint>();
+    protected Vector<MyPoint> points = new Vector<MyPoint>();
 
     // 模板模式
     protected String getDetail2String(){
         //建造者模式
         StringBuilder sb = new StringBuilder();
         int count = 0;
-        for(MyPoint p: myPoints)
-            sb.append("[" + (count++) + "]" + p.toString() + ";");
+        for(MyPoint p: points)
+            sb.append("[").append(count++).append("]").append(p.toString()).append(";");
         return sb.toString();
     }
 
@@ -33,25 +36,23 @@ public abstract class Shape implements IOperatable {
         return name + " (color:"+ color.toString() + ", width:" + width + ", " + getDetail2String() + ")";
     }
     public void translate(double dx, double dy){
-        myPoints.forEach(p -> p.translate(dx, dy));
+        points.forEach(p -> p.translate(dx, dy));
     }
     public void rotate(double alpha, double cx, double cy){
-        myPoints.forEach(p -> p.rotate(alpha, cx, cy));
+        points.forEach(p -> p.rotate(alpha, cx, cy));
     }
     public void rotate(double alpha){
-        myPoints.forEach(p -> p.rotate(alpha));
+        points.forEach(p -> p.rotate(alpha));
     }
-    protected Shape(){
-
+    protected Shape(MyPoint[] points){
+        this.color = Color.BLACK;
+        this.width = 1;
+        Collections.addAll(this.points, points);
     }
-    public Shape(Color color, double width){
-        this.color = color;
-        this.width = width;
+    protected Shape(MyPoint point){
+        this(new MyPoint[]{ point });
     }
-    public Shape(Color color, double width, MyPoint[] myPoints){
-        this(color, width);
-        Collections.addAll(this.myPoints, myPoints);
-    }
+    protected Shape(){ }
 
     public Color getColor() {
         return color;
@@ -67,5 +68,33 @@ public abstract class Shape implements IOperatable {
 
     public void setWidth(double width) {
         this.width = width;
+    }
+
+    public static JsonObject transColor2Json(Color color){
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "color");
+        json.addProperty("radius", color.getRed());
+        json.addProperty("g", color.getGreen());
+        json.addProperty("b", color.getBlue());
+        json.addProperty("a", color.getAlpha());
+        return json;
+    }
+    public static Color parseJson2Color(JsonObject json){
+        if (!json.get("type").getAsString().equals("color")){
+            return null;
+        }
+        int r = json.get("radius").getAsInt();
+        int g = json.get("g").getAsInt();
+        int b = json.get("b").getAsInt();
+        int a = json.get("a").getAsInt();
+        return new Color(r, g, b, a);
+    }
+
+    protected JsonArray Points2JsonArray(){
+        JsonArray arr = new JsonArray();
+        for (MyPoint point: points){
+            arr.add(point.toJson());
+        }
+        return arr;
     }
 }
