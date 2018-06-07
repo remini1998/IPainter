@@ -1,4 +1,4 @@
-package models;
+package models.shapes;
 
 import com.google.gson.JsonObject;
 import models.interfaces.IOperatable;

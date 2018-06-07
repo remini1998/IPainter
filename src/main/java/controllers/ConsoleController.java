@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Shape;
+import models.shapes.Shape;
 
 public class ConsoleController extends Controller {
 

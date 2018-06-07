@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="views.MainWindowsDemo">
+  <grid id="27dc6" binding="layerspPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="a1e0f" binding="toolsPanel" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <card name="Card2"/>
+        </constraints>
+        <properties>
+          <autoscrolls value="true"/>
+        </properties>
+        <clientProperties>
+          <html.disable class="java.lang.Boolean" value="false"/>
+        </clientProperties>
+        <border type="none"/>
+        <children>
+          <grid id="59ce6" binding="topToolsPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="60" height="52"/>
+              </grid>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="bf2d8" binding="drawToolsPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="20f9" class="javax.swing.JButton" binding="newBtn">
+                    <constraints/>
+                    <properties>
+                      <borderPainted value="true"/>
+                      <hideActionText value="false"/>
+                      <icon value="drawTools/create.png"/>
+                      <maximumSize width="50" height="50"/>
+                      <minimumSize width="50" height="50"/>
+                      <preferredSize width="50" height="50"/>
+                      <text value=""/>
+                      <toolTipText value="退出"/>
+                    </properties>
+                  </component>
+                  <component id="a10ac" class="javax.swing.JButton" binding="moveBtn">
+                    <constraints/>
+                    <properties>
+                      <icon value="move.png"/>
+                      <maximumSize width="50" height="50"/>
+                      <minimumSize width="50" height="50"/>
+                      <preferredSize width="50" height="50"/>
+                      <text value=""/>
+                      <toolTipText value="退出"/>
+                    </properties>
+                  </component>
+                  <component id="74024" class="javax.swing.JButton" binding="rotateBtn">
+                    <constraints/>
+                    <properties>
+                      <icon value="rotate.png"/>
+                      <maximumSize width="50" height="50"/>
+                      <minimumSize width="50" height="50"/>
+                      <preferredSize width="50" height="50"/>
+                      <text value=""/>
+                      <toolTipText value="退出"/>
+                    </properties>
+                  </component>
+                  <component id="100bb" class="javax.swing.JButton" binding="deleteBtn">
+                    <constraints/>
+                    <properties>
+                      <icon value="delete.png"/>
+                      <maximumSize width="50" height="50"/>
+                      <minimumSize width="50" height="50"/>
+                      <preferredSize width="50" height="50"/>
+                      <text value=""/>
+                      <toolTipText value="退出"/>
+                    </properties>
+                  </component>
+                  <component id="7058e" class="javax.swing.JButton" binding="exitBtn">
+                    <constraints/>
+                    <properties>
+                      <icon value="exit.png"/>
+                      <maximumSize width="50" height="50"/>
+                      <minimumSize width="50" height="50"/>
+                      <preferredSize width="50" height="50"/>
+                      <text value=""/>
+                      <toolTipText value="退出"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <vspacer id="8854e">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <grid id="1ad1a" binding="noticePanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
+            </children>
+          </grid>
+          <grid id="132b3" binding="shapePanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="bf446" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                </properties>
+                <border type="none"/>
+                <children/>
+              </grid>
+            </children>
+          </grid>
+          <grid id="cf98f" binding="optionPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
+        </children>
+      </grid>
+      <grid id="d66a1" binding="drawPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <card name="Card1"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+          <doubleBuffered value="false"/>
+          <enabled value="true"/>
+          <visible value="false"/>
+        </properties>
+        <border type="none"/>
+        <children/>
+      </grid>
+    </children>
+  </grid>
+</form>

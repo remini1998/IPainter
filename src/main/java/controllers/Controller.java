@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Shape;
+import models.shapes.Shape;
 
 public abstract class Controller {
     Shape shape;

@@ -1,26 +1,36 @@
-package models;
+package models.shapes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import controllers.Controller;
 import models.interfaces.IOperatable;
 import models.interfaces.ISerialized;
+import models.interfaces.IDrawable;
 
 import java.awt.*;
 import java.util.Collections;
 import java.util.Vector;
 
-public abstract class Shape implements IOperatable, ISerialized {
+public abstract class Shape implements IOperatable, ISerialized, IDrawable {
+
+    private String name;
 
     private Color color;
     // 小于等于0为填充模式
     private double width;
     // 视图控制器，组合模式
     public Controller controller;
-    // toString时显示的名字
-    protected static String name = "Shape";
     // 点集合
     protected Vector<MyPoint> points = new Vector<MyPoint>();
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     // 模板模式
     protected String getDetail2String(){
@@ -32,8 +42,12 @@ public abstract class Shape implements IOperatable, ISerialized {
         return sb.toString();
     }
 
+
+    // toString时显示的名字
+    protected abstract String getType();
+
     public String toString(){
-        return name + " (color:"+ color.toString() + ", width:" + width + ", " + getDetail2String() + ")";
+        return this.getType() + " (color:"+ color.toString() + ", width:" + width + ", " + getDetail2String() + ")";
     }
     public void translate(double dx, double dy){
         points.forEach(p -> p.translate(dx, dy));
@@ -45,29 +59,38 @@ public abstract class Shape implements IOperatable, ISerialized {
         points.forEach(p -> p.rotate(alpha));
     }
     protected Shape(MyPoint[] points){
-        this.color = Color.BLACK;
-        this.width = 1;
+        this();
         Collections.addAll(this.points, points);
     }
     protected Shape(MyPoint point){
         this(new MyPoint[]{ point });
     }
-    protected Shape(){ }
+    protected Shape(Vector<MyPoint> points){
+        this();
+        this.points = points;
+    }
+    protected Shape(){
+        this.name = getType();
+        this.color = Color.BLACK;
+        this.width = 1;
+    }
 
     public Color getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public Shape setColor(Color color) {
         this.color = color;
+        return this;
     }
 
     public double getWidth() {
         return width;
     }
 
-    public void setWidth(double width) {
+    public Shape setWidth(double width) {
         this.width = width;
+        return this;
     }
 
     public static JsonObject transColor2Json(Color color){

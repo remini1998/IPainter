@@ -1,16 +1,18 @@
-package models;
+package models.shapes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import controllers.JsonController;
+import models.viewModels.TreeNodePro;
 
+import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.util.Vector;
 import java.util.function.Consumer;
 
 //组合模式
 public class Group extends Shape {
-    protected static String name = "Group";
+    protected static String type = "Group";
     private Vector<Shape> shapes = new Vector<Shape>();
     public String toString(){
         StringBuilder sb = new StringBuilder();
@@ -18,7 +20,7 @@ public class Group extends Shape {
             sb.append(s.toString());
             sb.append('\n');
         }
-        return name + " {\n" + sb.toString() + "}";
+        return type + " {\n" + sb.toString() + "}";
     }
     public void translate(double dx, double dy){
         shapes.forEach(p -> p.translate(dx, dy));
@@ -30,21 +32,27 @@ public class Group extends Shape {
         shapes.forEach(p -> p.rotate(alpha));
     }
 
+    @Override
+    protected String getType() {
+        return Group.type;
+    }
 
     public Color getColor() {
         return null;
     }
 
-    public void setColor(Color color) {
+    public Shape setColor(Color color) {
         shapes.forEach(p -> p.setColor(color));
+        return this;
     }
 
     public double getWidth() {
         return 0;
     }
 
-    public void setWidth(double width) {
+    public Shape setWidth(double width) {
         shapes.forEach(p -> p.setWidth(width));
+        return this;
     }
 
     public void add(Shape s){
@@ -70,14 +78,14 @@ public class Group extends Shape {
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("type", Group.name);
-        JsonArray jShapes = JsonController.toJson((Shape[]) shapes.toArray());
+        json.addProperty("type", Group.type);
+        JsonArray jShapes = JsonController.toJson(shapes).get("shapes").getAsJsonArray();
         json.add("shapes", jShapes);
         return json;
     }
 
     public static Group parseFromJsonFactory(JsonObject json){
-        if (!json.get("type").getAsString().equals(Group.name)){
+        if (!json.get("type").getAsString().equals(Group.type)){
             return null;
         }
         Group g = new Group();
@@ -90,5 +98,17 @@ public class Group extends Shape {
             }
         });
         return g;
+    }
+
+    @Override
+    public TreeNodePro toTreeNode() {
+        TreeNodePro node = new TreeNodePro(this);
+        shapes.forEach(p -> node.add(p.toTreeNode()));
+        return node;
+    }
+
+    @Override
+    public void draw(Graphics g) {
+
     }
 }

@@ -1,14 +1,16 @@
-package models;
+package models.shapes;
 
 import com.google.gson.JsonObject;
+import models.viewModels.TreeNodePro;
 
+import javax.swing.tree.TreeNode;
 import java.awt.*;
 
 public class Circle extends Shape {
 
     public double radius;
 
-    protected static String name = "Circle";
+    protected static String type = "Circle";
 
     public MyPoint getCenter() {
         return center;
@@ -35,11 +37,15 @@ public class Circle extends Shape {
         this.center = center;
     }
 
+    @Override
+    protected String getType() {
+        return Circle.type;
+    }
 
     @Override
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("type", Circle.name);
+        json.addProperty("type", Circle.type);
         json.add("color", Shape.transColor2Json(this.getColor()));
         json.add("center", this.center.toJson());
         json.addProperty("radius", this.radius);
@@ -48,7 +54,7 @@ public class Circle extends Shape {
     }
 
     public static Circle parseFromJsonFactory(JsonObject json){
-        if (!json.get("type").getAsString().equals(Circle.name)){
+        if (!json.get("type").getAsString().equals(Circle.type)){
             return null;
         }
         MyPoint center = MyPoint.parseFromJsonFactory(json.get("center").getAsJsonObject());
@@ -59,5 +65,16 @@ public class Circle extends Shape {
         c.setColor(color);
         c.setWidth(width);
         return c;
+    }
+
+    @Override
+    public TreeNodePro toTreeNode() {
+        TreeNodePro node = new TreeNodePro(this);
+        return node;
+    }
+
+    @Override
+    public void draw(Graphics g) {
+
     }
 }
