@@ -94,8 +94,9 @@ public class DrawToolsPanel extends AlphaAnimationPanel implements ActionListene
         BlankFactory();
         deleteBtn = buttonBuilder("删除", "src/main/resources/drawTools/delete.png");
         exitBtn = buttonBuilder("退出", "src/main/resources/drawTools/exit.png");
+
         this.setOpaque(false);
-        this.setBorder(new EmptyBorder(0, 50, 40, 0));
+        this.setBorder(new EmptyBorder(0, 0, 0, 0));
     }
 
     public void paint(Graphics g){

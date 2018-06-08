@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class ToolsPanel extends JPanel {
+    private JPanel topPanel = new JPanel();
     private JPanel centerPanel = new JPanel();
     private JPanel centerLeftPanel = new JPanel();
     private JPanel centerRightPanel = new JPanel();
@@ -33,12 +34,15 @@ public class ToolsPanel extends JPanel {
         this.setOpaque(false);
 
         this.setLayout(new BorderLayout());
-        this.add("North", drawToolsPanel);
+        this.add("North", topPanel);
         this.add("Center", centerPanel);
         this.add("South", mentionPanel);
 
+        topPanel.setLayout(new BorderLayout());
+        topPanel.add("Center", drawToolsPanel);
+        topPanel.setOpaque(false);
+
         centerPanel.setLayout(new BorderLayout());
-        centerPanel.add("North", drawToolsPanel);
         centerPanel.add("West", centerLeftPanel);
         centerPanel.add("East", centerRightPanel);
         centerPanel.setOpaque(false);
@@ -52,7 +56,5 @@ public class ToolsPanel extends JPanel {
         centerLeftPanel.add(optionPanel, BorderLayout.CENTER);
         centerLeftPanel.setBorder(new EmptyBorder(10,20,100,20));
         centerLeftPanel.setOpaque(false);
-        drawToolsPanel.setAlpha(0.3f);
-
     }
 }

@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.util.Vector;
@@ -16,6 +17,8 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
     private Vector<Shape> shapes = new Vector<Shape>();
     private JScrollPane scrollPane;
     private JTree tree;
+    private DefaultTreeModel model;
+    private DefaultMutableTreeNode root;
 
     public ShapesManagerPanel(){
         Dimension size = new Dimension(250, 500);
@@ -25,10 +28,15 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
 
         this.setLayout(new BorderLayout());
 
-        this.scrollPane = new JScrollPane();
+        root = buildTree();
+        model = new DefaultTreeModel(root);
+        tree = new JTree(model);
+
+        scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setOpaque(false);
         this.add("Center", scrollPane);
-        scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(null);
+
         refreshTree();
     }
 
@@ -50,11 +58,15 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
     }
 
     private void refreshTree(){
-        scrollPane.removeAll();
-        TreeNode root = new DefaultMutableTreeNode("所有图形");
-        shapes.forEach(s->((DefaultMutableTreeNode) root).add(s.toTreeNode()));
-        tree = new JTree(root);
-        scrollPane.add(tree);
+        root.removeAllChildren();
+        shapes.forEach(s->root.add(s.toTreeNode()));
+        model.reload();
+    }
+
+    private DefaultMutableTreeNode buildTree(){
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("所有图形");
+        shapes.forEach(s->root.add(s.toTreeNode()));
+        return root;
     }
 
 }

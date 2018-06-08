@@ -40,6 +40,14 @@ public class AlphaAnimationPanel extends AlphaPanel {
         timer = new Timer(delay, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // 设置目标
+                Point m = getMousePosition(true);
+                if (m != null && containsPoint(m))
+                    alphaTarget = mouseEnterOpacity;
+                else
+                    alphaTarget = mouseExitOpacity;
+
+                // 动画
                 float alphaNow = getAlpha();
                 if (Math.abs(alphaNow - alphaTarget) <= step){
                     alphaNow = alphaTarget;
@@ -53,33 +61,6 @@ public class AlphaAnimationPanel extends AlphaPanel {
             }
         });
         startAnimation();
-        AlphaAnimationPanel that = this;
-        this.addMouseListener(new MouseAdapter() {
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
-                alphaTarget = mouseEnterOpacity;
-            }
-
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-                Point p = e.getPoint();
-                if (!that.contains(p)){
-                    alphaTarget = mouseExitOpacity;
-                }
-            }
-        });
     }
     public void updateTarget(float val){
         alphaTarget = val;
@@ -96,5 +77,11 @@ public class AlphaAnimationPanel extends AlphaPanel {
     }
     public void setSpeedPerSecond(float speed){
         step = speed / 1000 * delay;
+    }
+
+    private boolean containsPoint(Point p){
+        Point l = getLocation();
+        Point n = new Point(p.x - l.x, p.y -l.y);
+        return contains(n);
     }
 }

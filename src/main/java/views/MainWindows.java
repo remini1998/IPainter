@@ -21,7 +21,7 @@ public class MainWindows extends JFrame {
     boolean needCalcHorizShadowSize = true;
     boolean needCalcVertShadowSize = true;
 
-    public static void main(String[] args){;
+    public static void main(String[] args){
         try
         {
             BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.translucencyAppleLike;
@@ -66,10 +66,9 @@ public class MainWindows extends JFrame {
     }
 
     private void resize(){
-        int shadowSize = 50;
-        int heightHoriz = needCalcHorizShadowSize ? shadowSize : 0;
-        int shadowSizeVert = needCalcVertShadowSize ? shadowSize : 0;
-        int height = this.getHeight() - shadowSizeVert;
+        int heightHoriz = needCalcHorizShadowSize ? 50 : 0;
+        int shadowSizeVert = needCalcVertShadowSize ? 50 : 0;
+        int height = this.getHeight() - shadowSizeVert - 30;
         int width = this.getWidth() - heightHoriz;
         drawAreaPanel.setBounds(0, 0, width, height);
         toolsPanel.setBounds(0, 0, width, height);
