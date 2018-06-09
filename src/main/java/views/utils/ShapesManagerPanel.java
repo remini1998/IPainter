@@ -38,6 +38,10 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
         scrollPane.setBorder(null);
 
         refreshTree();
+
+        JButton clearSelection = new JButton("清除选择");
+        this.add("South", clearSelection);
+
     }
 
     public static void main(String[] args){
@@ -51,7 +55,7 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
 
     public void paint(Graphics g){
         super.paint(g);
-        setBackground(new Color(250, 250, 250,180));
+        setBackground(new Color(255, 255, 255,255));
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1, true);
         Border borderWithTitle = BorderFactory.createTitledBorder(border, "图形列表");
         setBorder(borderWithTitle);

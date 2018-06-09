@@ -11,7 +11,7 @@ import java.util.Vector;
 public class AlphaAnimationPanel extends AlphaPanel {
     private boolean animationSwitch = false;
     private float alphaTarget = 0.4f;
-    private float step = 0.2f;
+    private float step = 0.1f;
     private int delay = 10;
     private Timer timer;
     public boolean enableMouseInOutAnimation = true;

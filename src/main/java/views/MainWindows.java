@@ -15,17 +15,62 @@ import static javax.swing.JLayeredPane.*;
 
 public class MainWindows extends JFrame {
 
+    private static String OS = System.getProperty("os.name").toLowerCase();
+    private static String OSVer = System.getProperty("os.version").toLowerCase();
+
     JLayeredPane windowsPane = new JLayeredPane();
     ToolsPanel toolsPanel = new ToolsPanel();
     DrawAreaPanel drawAreaPanel = new DrawAreaPanel();
     boolean needCalcHorizShadowSize = true;
     boolean needCalcVertShadowSize = true;
 
+    /** UIManager中UI字体相关的key */
+    public static String[] DEFAULT_FONT  = new String[]{
+            "Table.font"
+            ,"TableHeader.font"
+            ,"CheckBox.font"
+            ,"Tree.font"
+            ,"Viewport.font"
+            ,"ProgressBar.font"
+            ,"RadioButtonMenuItem.font"
+            ,"ToolBar.font"
+            ,"ColorChooser.font"
+            ,"ToggleButton.font"
+            ,"Panel.font"
+            ,"TextArea.font"
+            ,"Menu.font"
+            ,"TableHeader.font"
+            // ,"TextField.font"
+            ,"OptionPane.font"
+            ,"MenuBar.font"
+            ,"Button.font"
+            ,"Label.font"
+            ,"PasswordField.font"
+            ,"ScrollPane.font"
+            ,"MenuItem.font"
+            ,"ToolTip.font"
+            ,"List.font"
+            ,"EditorPane.font"
+            ,"Table.font"
+            ,"TabbedPane.font"
+            ,"RadioButton.font"
+            ,"CheckBoxMenuItem.font"
+            ,"TextPane.font"
+            ,"PopupMenu.font"
+            ,"TitledBorder.font"
+            ,"ComboBox.font"
+    };
+
     public static void main(String[] args){
         try
         {
             BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.translucencyAppleLike;
             UIManager.put("RootPane.setupButtonVisible", false);
+            // 调整默认字体
+            if(isWindows7()){
+                for (int i = 0; i < DEFAULT_FONT.length; i++)
+                    UIManager.put(DEFAULT_FONT[i],new Font("微软雅黑", Font.PLAIN,14));
+            }
             BeautyEyeLNFHelper.launchBeautyEyeLNF();
         }
         catch(Exception e)
@@ -41,6 +86,10 @@ public class MainWindows extends JFrame {
 
     public MainWindows(){
         super(" IPainter: 绘手");
+
+        System.out.println(OS);
+        System.out.println(OSVer);
+
         this.setSize(1080, 720);
         this.add(windowsPane);
         resize();
@@ -77,5 +126,9 @@ public class MainWindows extends JFrame {
     public void paint(Graphics g){
         super.paint(g);
 //        setBackground(Color.WHITE);
+    }
+
+    private static boolean isWindows7(){
+        return OS.contains("windows") && !OSVer.startsWith("10");
     }
 }
