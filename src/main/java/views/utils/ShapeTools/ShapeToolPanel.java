@@ -11,6 +11,10 @@ public class ShapeToolPanel extends JPanel {
         this.add(addToolsComponent);
     }
 
+    public AddToolsPanel getAddToolsComponent(){
+        return addToolsComponent;
+    }
+
 
 
 }

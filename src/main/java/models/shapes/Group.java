@@ -79,6 +79,7 @@ public class Group extends Shape {
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", Group.type);
+        json.addProperty("name", this.getName());
         JsonArray jShapes = JsonController.toJson(shapes).get("shapes").getAsJsonArray();
         json.add("shapes", jShapes);
         return json;
@@ -90,6 +91,7 @@ public class Group extends Shape {
         }
         Group g = new Group();
         JsonArray jShapes = json.get("shapes").getAsJsonArray();
+        g.setName(json.get("name").getAsString());
         jShapes.forEach(j -> {
             try {
                 g.add(JsonController.travel(j.getAsJsonObject()));
@@ -109,6 +111,11 @@ public class Group extends Shape {
 
     @Override
     public void draw(Graphics g) {
+        this.shapes.forEach(s -> s.draw(g));
+    }
 
+    @Override
+    public void drawing(Graphics g) {
+        this.shapes.forEach(s -> s.drawing(g));
     }
 }

@@ -21,6 +21,9 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
     private DefaultMutableTreeNode root;
 
     public ShapesManagerPanel(){
+        // 鼠标指针重置
+        setCursor(Cursor.getDefaultCursor());
+
         Dimension size = new Dimension(250, 500);
         this.setPreferredSize(size);
         this.setSize(size);
@@ -61,7 +64,7 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
         setBorder(borderWithTitle);
     }
 
-    private void refreshTree(){
+    public void refreshTree(){
         root.removeAllChildren();
         shapes.forEach(s->root.add(s.toTreeNode()));
         model.reload();
@@ -71,6 +74,10 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("所有图形");
         shapes.forEach(s->root.add(s.toTreeNode()));
         return root;
+    }
+
+    public void setShapes(Vector<Shape> shapes){
+        this.shapes = shapes;
     }
 
 }

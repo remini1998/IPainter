@@ -1,5 +1,7 @@
 package views.foundations;
 
+import views.utils.DrawToolsPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -41,11 +43,7 @@ public class AlphaAnimationPanel extends AlphaPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 设置目标
-                Point m = getMousePosition(true);
-                if (m != null && containsPoint(m))
-                    alphaTarget = mouseEnterOpacity;
-                else
-                    alphaTarget = mouseExitOpacity;
+                setTarget();
 
                 // 动画
                 float alphaNow = getAlpha();
@@ -79,9 +77,12 @@ public class AlphaAnimationPanel extends AlphaPanel {
         step = speed / 1000 * delay;
     }
 
-    private boolean containsPoint(Point p){
-        Point l = getLocation();
-        Point n = new Point(p.x - l.x, p.y -l.y);
-        return contains(n);
+    private void setTarget(){
+        // 设置目标
+        Point m = getMousePosition(true);
+        if (m != null && contains(m))
+            alphaTarget = mouseEnterOpacity;
+        else
+            alphaTarget = mouseExitOpacity;
     }
 }

@@ -14,6 +14,9 @@ public class OptionPanel extends AlphaAnimationPanel {
     private ShapeToolPanel shapeToolComponent = new ShapeToolPanel();
 
     public OptionPanel(){
+        // 鼠标指针样式重置
+        setCursor(Cursor.getDefaultCursor());
+
         Dimension size = new Dimension(250, 500);
         this.setPreferredSize(size);
         this.setSize(size);
@@ -38,6 +41,10 @@ public class OptionPanel extends AlphaAnimationPanel {
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1, true);
         Border borderWithTitle = BorderFactory.createTitledBorder(border, "工具选项");
         setBorder(borderWithTitle);
+    }
+
+    public ShapeToolPanel getShapeToolComponent(){
+        return shapeToolComponent;
     }
 
 }

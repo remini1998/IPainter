@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import models.interfaces.IOperatable;
 import models.interfaces.ISerialized;
 
+import java.awt.*;
+
 import static java.lang.Math.*;
 
 public class MyPoint implements IOperatable, ISerialized {
@@ -12,6 +14,9 @@ public class MyPoint implements IOperatable, ISerialized {
     public MyPoint(double x, double y){
         this.x = x;
         this.y = y;
+    }
+    public MyPoint(Point p){
+        this(p.x, p.y);
     }
     public MyPoint(MyPoint p){
         this(p.x, p.y);
@@ -30,7 +35,7 @@ public class MyPoint implements IOperatable, ISerialized {
     public void rotate(double alpha){
         double rad = alpha / 360 * Math.PI;
         x = x * cos(rad) + y * sin(rad);
-        y = x * sin(rad) + y * cos(rad);
+        y = -x * sin(rad) + y * cos(rad);
     }
 
     public String toString(){
@@ -54,6 +59,16 @@ public class MyPoint implements IOperatable, ISerialized {
         double x = json.get("x").getAsDouble();
         double y = json.get("y").getAsDouble();
         return new MyPoint(x, y);
+    }
+
+    public double getDistance(MyPoint point){
+        double x2 = Math.pow(this.x - point.x, 2);
+        double y2 = Math.pow(this.y - point.y, 2);
+        return Math.sqrt(x2 + y2);
+    }
+
+    public Point toPoint(){
+        return new Point((int)Math.round(this.x), (int)Math.round(this.y));
     }
 
 }

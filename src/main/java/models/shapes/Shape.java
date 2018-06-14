@@ -6,6 +6,7 @@ import controllers.Controller;
 import models.interfaces.IOperatable;
 import models.interfaces.ISerialized;
 import models.interfaces.IDrawable;
+import models.viewModels.TreeNodePro;
 
 import java.awt.*;
 import java.util.Collections;
@@ -16,10 +17,19 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
     private String name;
 
     private Color color;
+    private Color bgColor;
     // 小于等于0为填充模式
     private double width;
     // 视图控制器，组合模式
     public Controller controller;
+
+    protected Object drawingInfo;
+
+    public Shape setDrawingInfo(Object info){
+        drawingInfo = info;
+        return this;
+    }
+
     // 点集合
     protected Vector<MyPoint> points = new Vector<MyPoint>();
 
@@ -28,8 +38,9 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
         return name;
     }
 
-    public void setName(String name) {
+    public Shape setName(String name) {
         this.name = name;
+        return this;
     }
 
     // 模板模式
@@ -84,6 +95,15 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
         return this;
     }
 
+    public Color getBackgroundColor() {
+        return bgColor;
+    }
+
+    public Shape setBackgroundColor(Color color) {
+        this.bgColor = color;
+        return this;
+    }
+
     public double getWidth() {
         return width;
     }
@@ -96,7 +116,7 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
     public static JsonObject transColor2Json(Color color){
         JsonObject json = new JsonObject();
         json.addProperty("type", "color");
-        json.addProperty("radius", color.getRed());
+        json.addProperty("r", color.getRed());
         json.addProperty("g", color.getGreen());
         json.addProperty("b", color.getBlue());
         json.addProperty("a", color.getAlpha());
@@ -106,7 +126,7 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
         if (!json.get("type").getAsString().equals("color")){
             return null;
         }
-        int r = json.get("radius").getAsInt();
+        int r = json.get("r").getAsInt();
         int g = json.get("g").getAsInt();
         int b = json.get("b").getAsInt();
         int a = json.get("a").getAsInt();
@@ -119,5 +139,43 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
             arr.add(point.toJson());
         }
         return arr;
+    }
+
+    public TreeNodePro toTreeNode() {
+        TreeNodePro node = new TreeNodePro(this);
+        return node;
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type", getType());
+        json.addProperty("name", getName());
+        json.add("color", Shape.transColor2Json(this.getColor()));
+        json.add("bg-color", Shape.transColor2Json(this.getColor()));
+        json.add("points", Points2JsonArray());
+        json.addProperty("width", this.getWidth());
+        return json;
+    }
+
+    protected static Shape generalShapeSetter(Shape shape, JsonObject json){
+
+        String name = json.get("name").getAsString();
+        Color color = Shape.parseJson2Color(json.get("color").getAsJsonObject());
+        Color bgColor = Shape.parseJson2Color(json.get("bg-color").getAsJsonObject());
+        double width = json.get("width").getAsDouble();
+
+        shape.setName(name);
+        shape.setColor(color);
+        shape.setBackgroundColor(bgColor);
+        shape.setWidth(width);
+
+        return shape;
+
+    }
+
+
+    public void drawing(Graphics g){
+        draw(g);
     }
 }

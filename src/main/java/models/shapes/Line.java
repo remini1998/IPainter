@@ -25,10 +25,7 @@ public class Line extends Shape {
 
     @Override
     public JsonObject toJson() {
-        JsonObject json = new JsonObject();
-        json.addProperty("type", Line.type);
-        json.add("color", Shape.transColor2Json(this.getColor()));
-        json.addProperty("width", this.getWidth());
+        JsonObject json = super.toJson();
         json.add("x", this.points.get(0).toJson());
         json.add("y", this.points.get(1).toJson());
         return json;
@@ -40,22 +37,24 @@ public class Line extends Shape {
         }
         MyPoint x = MyPoint.parseFromJsonFactory(json.get("x").getAsJsonObject());
         MyPoint y = MyPoint.parseFromJsonFactory(json.get("y").getAsJsonObject());
-        Color color = Shape.parseJson2Color(json.get("color").getAsJsonObject());
-        double width = json.get("width").getAsDouble();
         Line l = new Line(x, y);
-        l.setColor(color);
-        l.setWidth(width);
+        generalShapeSetter(l, json);
         return l;
     }
 
     @Override
-    public TreeNodePro toTreeNode() {
-        TreeNodePro node = new TreeNodePro(this);
-        return node;
-    }
-
-    @Override
     public void draw(Graphics g) {
-
+        Graphics2D g2d =  (Graphics2D) g.create();
+        // 更改线宽
+        BasicStroke bs=new BasicStroke((float) this.getWidth());
+        g2d.setStroke(bs);
+        g2d.setColor(this.getColor());
+        double x1 = this.points.get(0).x;
+        double y1 = this.points.get(0).y;
+        double x2 = this.points.get(1).x;
+        double y2 = this.points.get(1).y;
+        g2d.drawLine((int) Math.round(x1), (int) Math.round(y1),
+                   (int) Math.round(x2), (int) Math.round(y2));
+        g2d.dispose();
     }
 }

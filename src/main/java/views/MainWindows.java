@@ -1,8 +1,12 @@
 package views;
 
+import models.shapes.Line;
+import models.shapes.MyPoint;
+import models.shapes.Shape;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 import views.panels.DrawAreaPanel;
 import views.panels.ToolsPanel;
+import views.utils.DrawToolsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +14,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Vector;
 
 import static javax.swing.JLayeredPane.*;
 
@@ -23,6 +28,11 @@ public class MainWindows extends JFrame {
     DrawAreaPanel drawAreaPanel = new DrawAreaPanel();
     boolean needCalcHorizShadowSize = true;
     boolean needCalcVertShadowSize = true;
+
+    private DrawToolsPanel.DrawTools nowTools = DrawToolsPanel.DrawTools.NONE;
+
+    private Vector<Shape> shapes = new Vector<>();
+    private Vector<Shape> drawingList = new Vector<>();
 
     /** UIManager中UI字体相关的key */
     public static String[] DEFAULT_FONT  = new String[]{
@@ -87,9 +97,6 @@ public class MainWindows extends JFrame {
     public MainWindows(){
         super(" IPainter: 绘手");
 
-        System.out.println(OS);
-        System.out.println(OSVer);
-
         this.setSize(1080, 720);
         this.add(windowsPane);
         resize();
@@ -112,6 +119,17 @@ public class MainWindows extends JFrame {
                 needCalcVertShadowSize = ((e.getNewState() & JFrame.MAXIMIZED_VERT) == 0);
             }
         });
+
+        // 更改工具事件
+        this.toolsPanel.addDrawToolSelectedListener(drawAreaPanel.new SelectionChangeEventHandler());
+
+        this.toolsPanel.setShapes(shapes);
+        this.toolsPanel.setDrawingList(drawingList);
+
+        this.drawAreaPanel.setShapes(shapes);
+        this.drawAreaPanel.setDrawingList(drawingList);
+
+        toolsPanel.refreshShapes();
     }
 
     private void resize(){

@@ -28,6 +28,10 @@ public class Polygon extends Shape {
         return RectangleFactory(new MyPoint(bx, by), rectHeight, rectWidth);
     }
 
+    public static Polygon RectangleFactory(MyPoint begin, MyPoint end){
+        return RectangleFactory(begin, end.y - begin.y, end.x - begin.x);
+    }
+
     public static Polygon RectangleFactory(MyPoint begin, double rectHeight, double rectWidth){
         MyPoint[] points = new MyPoint[4];
         points[0] = begin;
@@ -63,13 +67,25 @@ public class Polygon extends Shape {
     }
 
     @Override
-    public TreeNodePro toTreeNode() {
-        TreeNodePro node = new TreeNodePro(this);
-        return node;
-    }
-
-    @Override
     public void draw(Graphics g) {
-
+        Graphics2D g2d =  (Graphics2D) g.create();
+        int n = points.size();
+        int[] xPoints = new int[n];
+        int[] yPoints = new int[n];
+        for(int i = 0; i < n; i++){
+            xPoints[i] = (int) Math.round(points.get(i).x);
+            yPoints[i] = (int) Math.round(points.get(i).y);
+        }
+        // 如果有填充
+        if(this.getBackgroundColor() != null){
+            g2d.setColor(getBackgroundColor());
+            g2d.fillPolygon(xPoints, yPoints, n);
+        }
+        // 更改线宽
+        BasicStroke bs=new BasicStroke((float) this.getWidth());
+        g2d.setStroke(bs);
+        g2d.setColor(this.getColor());
+        g2d.drawPolygon(xPoints, yPoints, n);
+        g2d.dispose();
     }
 }

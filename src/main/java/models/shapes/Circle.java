@@ -44,12 +44,9 @@ public class Circle extends Shape {
 
     @Override
     public JsonObject toJson() {
-        JsonObject json = new JsonObject();
-        json.addProperty("type", Circle.type);
-        json.add("color", Shape.transColor2Json(this.getColor()));
+        JsonObject json = super.toJson();
         json.add("center", this.center.toJson());
         json.addProperty("radius", this.radius);
-        json.addProperty("width", this.getWidth());
         return json;
     }
 
@@ -58,23 +55,44 @@ public class Circle extends Shape {
             return null;
         }
         MyPoint center = MyPoint.parseFromJsonFactory(json.get("center").getAsJsonObject());
-        Color color = Shape.parseJson2Color(json.get("color").getAsJsonObject());
         double radius = json.get("radius").getAsDouble();
-        double width = json.get("width").getAsDouble();
         Circle c = new Circle(center, radius);
-        c.setColor(color);
-        c.setWidth(width);
+        generalShapeSetter(c, json);
         return c;
     }
 
     @Override
-    public TreeNodePro toTreeNode() {
-        TreeNodePro node = new TreeNodePro(this);
-        return node;
+    public void draw(Graphics g) {
+        Graphics2D g2d =  (Graphics2D) g.create();
+        double cx = this.points.get(0).x;
+        double cy = this.points.get(0).y;
+        int d = (int) Math.round(radius * 2);
+        // 如果有画背景
+        if(this.getBackgroundColor() != null){
+            g2d.setColor(getBackgroundColor());
+            g2d.fillOval((int) Math.round(cx - radius), (int) Math.round(cy - radius), d, d);
+        }
+        // 更改线宽
+        BasicStroke bs=new BasicStroke((float) this.getWidth());
+        g2d.setStroke(bs);
+        g2d.setColor(this.getColor());
+        g2d.drawOval((int) Math.round(cx - radius), (int) Math.round(cy - radius), d, d);
+        g2d.dispose();
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void drawing(Graphics g) {
+        super.drawing(g);
+        try {
+            Point center = this.center.toPoint();
+            Point mouse = ((MyPoint) drawingInfo).toPoint();
+            g.drawLine(center.x, center.y, mouse.x, mouse.y);
+            double distance = new MyPoint(center).getDistance(new MyPoint(mouse));
+            Point textPos = new Point((center.x + mouse.x) / 2, (center.y + mouse.y) / 2);
+            g.drawString(String.format("%.1f", distance), textPos.x, textPos.y);
+        }
+        catch (Exception e){
 
+        }
     }
 }

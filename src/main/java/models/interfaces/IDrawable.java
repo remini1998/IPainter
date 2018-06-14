@@ -9,4 +9,5 @@ public interface IDrawable {
     // 用于在层级中显示
     TreeNodePro toTreeNode();
     void draw(Graphics g);
+    void drawing(Graphics g);
 }
