@@ -103,6 +103,13 @@ public class ToolsPanel extends JPanel {
             }
         });
 
+        drawToolsPanel.addBtnListener(new DrawToolsPanel.BtnListener() {
+            @Override
+            public void btnClicked(DrawToolsPanel.DrawButtons btnClicked) {
+                DrawToolCalled(btnClicked);
+            }
+        });
+
         addMouseListener(new MouseAdapter() {
             /**
              * {@inheritDoc}
@@ -298,6 +305,7 @@ public class ToolsPanel extends JPanel {
                     throw new NotImplementedException();
 
             }
+            mentionPanel.repaint();
         }
     }
 
@@ -323,6 +331,7 @@ public class ToolsPanel extends JPanel {
                     throw new NotImplementedException();
 
             }
+            mentionPanel.repaint();
             firstPoint = null;
         }
     }
@@ -355,4 +364,17 @@ public class ToolsPanel extends JPanel {
         }
         return null;
     }
+
+    private void DrawToolCalled(DrawToolsPanel.DrawButtons tool){
+        switch (tool){
+            case DELETE:
+                shapes.removeAllElements();
+                refreshShapes();
+                break;
+                default:
+                    throw new NotImplementedException();
+        }
+    }
+
+
 }

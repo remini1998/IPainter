@@ -10,7 +10,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class ShapesManagerPanel extends AlphaAnimationPanel {
@@ -44,6 +47,12 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
 
         JButton clearSelection = new JButton("清除选择");
         this.add("South", clearSelection);
+        clearSelection.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tree.clearSelection();
+            }
+        });
 
     }
 
@@ -78,6 +87,30 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
 
     public void setShapes(Vector<Shape> shapes){
         this.shapes = shapes;
+    }
+
+    /**
+     * 返回选中的集合
+     * @return 如果没有返回null
+     */
+    public Vector<Shape> getSelected(){
+        Vector<Shape> selected = new Vector<>();
+
+        TreePath[] treePaths = tree.getSelectionModel().getSelectionPaths();
+        for (TreePath treePath : treePaths) {
+            DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode)treePath.getLastPathComponent();
+            try{
+                Shape userObject = (Shape) selectedElement.getUserObject();//Do what you want with selected element's user object
+                selected.add(userObject);
+            }
+            catch (Exception e){  }
+        }
+
+        if (selected.size() == 0){
+            return null;
+        }else {
+            return selected;
+        }
     }
 
 }

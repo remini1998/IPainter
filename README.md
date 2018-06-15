@@ -20,7 +20,7 @@ A Painter for the course practice of Java
 图片
 文字
 删除
-树状图标
+树图标
 保存文件
 读取文件
 
