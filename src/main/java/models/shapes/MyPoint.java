@@ -34,8 +34,10 @@ public class MyPoint implements IOperatable, ISerialized {
     }
     public void rotate(double alpha){
         double rad = alpha / 360 * Math.PI;
-        x = x * cos(rad) + y * sin(rad);
-        y = -x * sin(rad) + y * cos(rad);
+        double nx = x * cos(rad) + y * sin(rad);
+        double ny = y = -x * sin(rad) + y * cos(rad);
+        x = nx;
+        y = ny;
     }
 
     public String toString(){

@@ -13,6 +13,11 @@ import java.util.function.Consumer;
 //组合模式
 public class Group extends Shape {
     protected static String type = "Group";
+
+    public String getIcon(){
+        return "/shapes/group.png";
+    }
+
     private Vector<Shape> shapes = new Vector<Shape>();
     public String toString(){
         StringBuilder sb = new StringBuilder();
@@ -59,10 +64,6 @@ public class Group extends Shape {
         shapes.add(s);
     }
 
-    public void remove(Shape s){
-        shapes.remove(s);
-    }
-
     public Shape get(int index){
         ;return shapes.get(index);
     }
@@ -77,7 +78,7 @@ public class Group extends Shape {
 
     @Override
     public JsonObject toJson() {
-        JsonObject json = new JsonObject();
+        JsonObject json = super.toJson();
         json.addProperty("type", Group.type);
         json.addProperty("name", this.getName());
         JsonArray jShapes = JsonController.toJson(shapes).get("shapes").getAsJsonArray();
@@ -117,5 +118,20 @@ public class Group extends Shape {
     @Override
     public void drawing(Graphics g) {
         this.shapes.forEach(s -> s.drawing(g));
+    }
+
+    public boolean remove(Shape s) {
+        return removeInVector(this.shapes, s);
+    }
+
+    public static boolean removeInVector(Vector<Shape> ss, Shape remove){
+        for(Shape s: ss){
+            if(Group.class.isInstance(s)){
+                if(((Group)s).remove(remove)){
+                    return true;
+                }
+            }
+        }
+        return ss.remove(remove);
     }
 }

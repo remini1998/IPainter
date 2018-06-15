@@ -1,5 +1,6 @@
 package views.renderers;
 
+import models.shapes.Shape;
 import models.viewModels.TreeNodePro;
 
 import javax.swing.*;
@@ -17,14 +18,24 @@ public class MyJTreeRenderer extends DefaultTreeCellRenderer {
         // 执行父类原型操作
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
                 row, hasFocus);
-        if(!value.getClass().isAssignableFrom(TreeNodePro.class)){
+        tree.setRootVisible(false);
+        if(!(value instanceof TreeNodePro)){
             // 顶点
             return this;
         }
         // 节点
-        TreeNodePro nodePro = (TreeNodePro) value;
-
-
+        Shape v = (Shape) ((TreeNodePro) value).getValue();
+        setText(v.getName());
+        if(Shape.isMainColor(v.getBackgroundColor())){
+            setTextNonSelectionColor(v.getBackgroundColor());
+        }else{
+            setTextNonSelectionColor(v.getColor());
+        }
+        java.net.URL imageURL = this.getClass().getResource(v.getIcon());
+        ImageIcon imgIcon = new ImageIcon(imageURL);
+        int iconSize = 16;
+        imgIcon.setImage(imgIcon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
+        this.setIcon(imgIcon);
         return this;
     }
 }

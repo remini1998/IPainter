@@ -1,5 +1,7 @@
 package views.components;
 
+import models.shapes.Shape;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.CaretEvent;
@@ -25,16 +27,24 @@ public class ColorComponent extends JTextPane {
         String text = getColorText();
 //        this.setSelectionColor(color);
         // 设置字体颜色
-        if(color.getBlue() + color.getGreen() + color.getBlue() < 550 && color.getAlpha() > 150){
+        if(Shape.isMainColor(color)){
             this.setText(text, Color.WHITE);
         }else {
             this.setText(text, Color.BLACK);
         }
     }
 
+    private String to2Hex(int num){
+        StringBuilder result = new StringBuilder(Integer.toHexString(num));
+        while (result.length() < 2){
+            result.insert(0, "0");
+        }
+        return result.toString();
+    }
+
     private String getColorText(){
         if(enable && color != null)
-            return  "#"+Integer.toHexString(color.getRGB()).substring(2).toUpperCase();
+            return  "#"+(to2Hex(color.getRed()) + to2Hex(color.getGreen()) + to2Hex(color.getBlue())).toUpperCase();
         else
             return "";
     }

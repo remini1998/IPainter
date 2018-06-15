@@ -1,5 +1,7 @@
 package views.panels;
 
+import controllers.FileController;
+import javafx.stage.FileChooser;
 import models.shapes.*;
 import models.shapes.Polygon;
 import models.shapes.Shape;
@@ -13,10 +15,12 @@ import views.utils.ShapesManagerPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.dnd.MouseDragGestureRecognizer;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 public class ToolsPanel extends JPanel {
@@ -34,6 +38,8 @@ public class ToolsPanel extends JPanel {
     private OptionPanel optionPanel = new OptionPanel();
     private ShapesManagerPanel shapesManagerPanel = new ShapesManagerPanel();
     private MentionPanel mentionPanel = new MentionPanel();
+
+    private JFileChooser fileChooser = new JFileChooser(".");
 
     // 记录上次的移动，移动使用
     private Point lastMove;
@@ -169,6 +175,9 @@ public class ToolsPanel extends JPanel {
             }
         });
 
+        fileChooser.setFileFilter(new FileNameExtensionFilter("图形json文件(*.sson)", "sson"));
+        fileChooser.setMultiSelectionEnabled(false);
+
     }
 
     public void addDrawToolSelectedListener(DrawToolsPanel.SelectionListener listener){
@@ -239,6 +248,7 @@ public class ToolsPanel extends JPanel {
 
     public void refreshShapes(){
         shapesManagerPanel.refreshTree();
+        mentionPanel.repaint();
     }
 
     public void setShapes(Vector<Shape> shapes){
@@ -283,9 +293,9 @@ public class ToolsPanel extends JPanel {
                     if(lastMove != null){
                         lastMove.x = -lastMove.x;
                         lastMove.y = -lastMove.y;
-                        moveAll(lastMove);
+                        moveTool(lastMove);
                     }
-                    moveAll(thisMove);
+                    moveTool(thisMove);
                     lastMove = thisMove;
                     break;
 
@@ -298,13 +308,14 @@ public class ToolsPanel extends JPanel {
                     drawing.add(new Text(new MyPoint(textRotatePos), String.format("%.1f°", r)));
                     drawing.add(new Line(firstPoint.x, firstPoint.y, drag.x, firstPoint.y));
 
-                    rotateAll(r - lastRotate, firstPoint.x, firstPoint.y);
+                    rotateTool(r - lastRotate, firstPoint.x, firstPoint.y);
                     lastRotate = r;
                     break;
                 default:
                     throw new NotImplementedException();
 
             }
+
             mentionPanel.repaint();
         }
     }
@@ -322,11 +333,13 @@ public class ToolsPanel extends JPanel {
                     break;
                 case MOVE:
                     lastMove = null;
+                    Vector<Shape> selected = this.shapesManagerPanel.getSelected();
                     drawing.removeAllElements();
                     break;
                 case ROTATE:
                     lastRotate = 0;
                     drawing.removeAllElements();
+                    break;
                 default:
                     throw new NotImplementedException();
 
@@ -336,12 +349,25 @@ public class ToolsPanel extends JPanel {
         }
     }
 
-    private void moveAll(Point p){
-        shapes.forEach(s -> s.translate(p.x, p.y));
+    private void moveTool(Point p){
+        Vector<Shape> selected = shapesManagerPanel.getSelected();
+        if(selected == null){
+            shapes.forEach(s -> s.translate(p.x, p.y));
+        }
+        else {
+            selected.forEach(s -> s.translate(p.x, p.y));
+        }
     }
 
-    private void rotateAll(double r, double cx, double cy){
-        shapes.forEach(s -> s.rotate(r, cx, cy));
+    private void rotateTool(double r, double cx, double cy){
+
+        Vector<Shape> selected = shapesManagerPanel.getSelected();
+        if(selected == null){
+            shapes.forEach(s -> s.rotate(r, cx, cy));
+        }
+        else {
+            selected.forEach(s -> s.rotate(r, cx, cy));
+        }
     }
 
     private Shape shapeFactory(Point p1, Point p2){
@@ -361,19 +387,101 @@ public class ToolsPanel extends JPanel {
                 return new Circle(mp1, r).setDrawingInfo(mp2).setWidth(width).setColor(color).setBackgroundColor(bgColor); // 设置辅助绘画信息
             case Oval:
                 return new Oval(mp1, mp2).setWidth(width).setColor(color).setBackgroundColor(bgColor);
+            default:
+                throw new NotImplementedException();
         }
-        return null;
     }
 
     private void DrawToolCalled(DrawToolsPanel.DrawButtons tool){
+        Vector<Shape>
+                selected = this.shapesManagerPanel.getSelected();;
         switch (tool){
             case DELETE:
-                shapes.removeAllElements();
+                if(selected == null){
+                    if(JOptionPane.showConfirmDialog(this,
+                            "未选择任何项，确定全部清空？", "清空", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION){
+                        shapes.removeAllElements();
+                    }
+                }
+                else {
+                    for(Shape s: selected){
+                        Group.removeInVector(shapes, s);
+                    }
+                }
                 refreshShapes();
                 break;
-                default:
-                    throw new NotImplementedException();
+            case GROUP:
+                if(selected == null){
+                    JOptionPane.showMessageDialog(this, "未选择元素！");
+                }
+                else {
+                    Group g = new Group();
+                    for(Shape s: selected){
+                        g.add(s);
+                        Group.removeInVector(shapes, s);
+                    }
+                    shapes.add(g);
+                    refreshShapes();
+                }
+                break;
+            case SAVE:
+                save();
+                break;
+            case OPEN:
+                open();
+                break;
+            default:
+                throw new NotImplementedException();
         }
+
+    }
+    private boolean save(){
+//                fileChooser.setDialogTitle("打开文件");
+        if(fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+            String address = fileChooser.getSelectedFile().getPath();
+            if (!address.endsWith(".sson")) address = address + ".sson";
+            File f = new File(address);
+            try{
+                FileController.write2File(f, shapes);
+                JOptionPane.showMessageDialog(this, "保存成功");
+                return true;
+            }
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "保存失败！");
+                return false;
+            }
+        }
+        return false;
+    }
+    private boolean open(){
+        if(shapes.size() > 0){
+            switch (JOptionPane.showConfirmDialog(this,
+                    "当前未保存，请问是否保存？", "注意", JOptionPane.YES_NO_CANCEL_OPTION)){
+                case JOptionPane.YES_OPTION:
+                    save();
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    return false;
+            }
+        }
+        if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            File f = fileChooser.getSelectedFile();
+            try{
+                this.shapes.removeAllElements();
+                this.shapes.addAll(FileController.readFormFile(f));
+                JOptionPane.showMessageDialog(this, "打开成功");
+                refreshShapes();
+                return true;
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "打开失败！");
+                e.printStackTrace();
+                refreshShapes();
+                return false;
+            }
+        }
+        return false;
+
     }
 
 

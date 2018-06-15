@@ -11,6 +11,11 @@ public class Oval extends Shape {
 
     protected static String type = "Oval";
 
+    public String getIcon(){
+        return "/shapes/oval.png";
+    }
+
+
     public Oval(int bx, int by, double ovalHeight, double ovalWidth){
         this(new MyPoint(bx, by), ovalHeight, ovalWidth);
     }
@@ -31,40 +36,48 @@ public class Oval extends Shape {
 
     @Override
     public JsonObject toJson() {
-        JsonObject json = new JsonObject();
+        JsonObject json = super.toJson();
         json.add("start", this.points.get(0).toJson());
         json.add("end", this.points.get(1).toJson());
         return json;
     }
 
-        public static Oval parseFromJsonFactory(JsonObject json){
-            if (!json.get("type").getAsString().equals(Oval.type)){
-                return null;
-            }
-            MyPoint start = MyPoint.parseFromJsonFactory(json.get("start").getAsJsonObject());
-            MyPoint end = MyPoint.parseFromJsonFactory(json.get("end").getAsJsonObject());
-            Oval o = new Oval(start, end);
-            generalShapeSetter(o, json);
-            return o;
+    public static Oval parseFromJsonFactory(JsonObject json){
+        if (!json.get("type").getAsString().equals(Oval.type)){
+            return null;
         }
+        MyPoint start = MyPoint.parseFromJsonFactory(json.get("start").getAsJsonObject());
+        MyPoint end = MyPoint.parseFromJsonFactory(json.get("end").getAsJsonObject());
+        Oval o = new Oval(start, end);
+        generalShapeSetter(o, json);
+        return o;
+    }
 
-        @Override
-        public void draw(Graphics g) {
-            Graphics2D g2d =  (Graphics2D) g.create();
-            double x1 = this.points.get(0).x;
-            double y1 = this.points.get(0).y;
-            double x2 = this.points.get(1).x - x1;
-            double y2 = this.points.get(1).y - y1;
-            // 如果有填充
-            if(this.getBackgroundColor() != null){
-                g2d.setColor(getBackgroundColor());
-                g2d.fillOval((int) Math.round(x1), (int) Math.round(y1), (int) Math.round(x2), (int) Math.round(y2));
-            }
-            // 更改线宽
-            BasicStroke bs=new BasicStroke((float) this.getWidth());
-            g2d.setStroke(bs);
-            g2d.setColor(this.getColor());
-            g2d.drawOval((int) Math.round(x1), (int) Math.round(y1), (int) Math.round(x2), (int) Math.round(y2));
-            g2d.dispose();
+    @Override
+    public void draw(Graphics g) {
+        Graphics2D g2d =  (Graphics2D) g.create();
+        double x1 = this.points.get(0).x;
+        double y1 = this.points.get(0).y;
+        double x2 = this.points.get(1).x - x1;
+        double y2 = this.points.get(1).y - y1;
+        if(x2 < 0){
+            x1 = x1 + x2;
+            x2 = -x2;
         }
+        if(y2 < 0){
+            y1 = y1 + y2;
+            y2 = -y2;
+        }
+        // 如果有填充
+        if(this.getBackgroundColor() != null){
+            g2d.setColor(getBackgroundColor());
+            g2d.fillOval((int) Math.round(x1), (int) Math.round(y1), (int) Math.round(x2), (int) Math.round(y2));
+        }
+        // 更改线宽
+        BasicStroke bs=new BasicStroke((float) this.getWidth());
+        g2d.setStroke(bs);
+        g2d.setColor(this.getColor());
+        g2d.drawOval((int) Math.round(x1), (int) Math.round(y1), (int) Math.round(x2), (int) Math.round(y2));
+        g2d.dispose();
+    }
 }

@@ -3,6 +3,7 @@ package views.utils;
 import models.shapes.Shape;
 import models.viewModels.TreeNodePro;
 import views.foundations.AlphaAnimationPanel;
+import views.renderers.MyJTreeRenderer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -39,9 +40,11 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
         tree = new JTree(model);
 
         scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.setOpaque(false);
+//        this.setOpaque(false);
         this.add("Center", scrollPane);
         scrollPane.setBorder(null);
+
+        tree.setCellRenderer(new MyJTreeRenderer());
 
         refreshTree();
 
@@ -100,6 +103,7 @@ public class ShapesManagerPanel extends AlphaAnimationPanel {
         for (TreePath treePath : treePaths) {
             DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode)treePath.getLastPathComponent();
             try{
+                Object myObj = selectedElement.getUserObject();
                 Shape userObject = (Shape) selectedElement.getUserObject();//Do what you want with selected element's user object
                 selected.add(userObject);
             }

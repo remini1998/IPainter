@@ -18,6 +18,11 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
 
     private Color color;
     private Color bgColor;
+
+    public String getIcon(){
+        return "/shapes/shape.png";
+    }
+
     // 小于等于0为填充模式
     private double width;
     // 视图控制器，组合模式
@@ -116,10 +121,18 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
     public static JsonObject transColor2Json(Color color){
         JsonObject json = new JsonObject();
         json.addProperty("type", "color");
-        json.addProperty("r", color.getRed());
-        json.addProperty("g", color.getGreen());
-        json.addProperty("b", color.getBlue());
-        json.addProperty("a", color.getAlpha());
+        if(color != null){
+            json.addProperty("r", color.getRed());
+            json.addProperty("g", color.getGreen());
+            json.addProperty("b", color.getBlue());
+            json.addProperty("a", color.getAlpha());
+        }
+        else{
+            json.addProperty("r", 0);
+            json.addProperty("g", 0);
+            json.addProperty("b", 0);
+            json.addProperty("a", 0);
+        }
         return json;
     }
     public static Color parseJson2Color(JsonObject json){
@@ -152,7 +165,7 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
         json.addProperty("type", getType());
         json.addProperty("name", getName());
         json.add("color", Shape.transColor2Json(this.getColor()));
-        json.add("bg-color", Shape.transColor2Json(this.getColor()));
+        json.add("bg-color", Shape.transColor2Json(this.getBackgroundColor()));
         json.add("points", Points2JsonArray());
         json.addProperty("width", this.getWidth());
         return json;
@@ -177,5 +190,9 @@ public abstract class Shape implements IOperatable, ISerialized, IDrawable {
 
     public void drawing(Graphics g){
         draw(g);
+    }
+
+    public static boolean isMainColor(Color color){
+        return color != null && color.getBlue() + color.getGreen() + color.getBlue() < 550 && color.getAlpha() > 150;
     }
 }

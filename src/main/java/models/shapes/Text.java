@@ -7,6 +7,11 @@ import java.awt.*;
 public class Text extends Shape {
     protected static String type = "Text";
 
+    public String getIcon(){
+        return "/shapes/text.png";
+    }
+
+
     public String getText() {
         return text;
     }

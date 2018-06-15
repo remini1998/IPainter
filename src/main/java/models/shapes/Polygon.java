@@ -12,6 +12,11 @@ public class Polygon extends Shape {
 
     protected static String type = "Polygon";
 
+    public String getIcon(){
+        return "/shapes/polygon.png";
+    }
+
+
     @Override
     protected String getType() {
         return Polygon.type;
@@ -43,11 +48,7 @@ public class Polygon extends Shape {
 
     @Override
     public JsonObject toJson() {
-        JsonObject json = new JsonObject();
-        json.addProperty("type", Polygon.type);
-        json.add("color", Shape.transColor2Json(this.getColor()));
-        json.addProperty("width", this.getWidth());
-        json.add("points", this.Points2JsonArray());
+        JsonObject json = super.toJson();
         return json;
     }
 

@@ -18,7 +18,9 @@ public abstract class JsonController {
             Circle.class,
             Group.class,
             Line.class,
-            Polygon.class
+            Polygon.class,
+            Oval.class,
+            Text.class
     };
 
     public static Vector<Shape> parse(String content) throws Exception {

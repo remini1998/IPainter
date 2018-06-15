@@ -8,6 +8,11 @@ import java.awt.*;
 
 public class Line extends Shape {
     protected static String type = "Line";
+
+    public String getIcon(){
+        return "/shapes/line.png";
+    }
+
     public Line(double x1, double y1, double x2, double y2){
         this(new MyPoint(x1, y1), new MyPoint(x2, y2));
     }

@@ -12,6 +12,10 @@ public class Circle extends Shape {
 
     protected static String type = "Circle";
 
+    public String getIcon(){
+        return "/shapes/circle.png";
+    }
+
     public MyPoint getCenter() {
         return center;
     }

@@ -13,7 +13,7 @@ import java.util.Vector;
 public class DrawToolsPanel extends AlphaAnimationPanel implements ActionListener {
 
     public enum DrawButtons {
-        DELETE
+        DELETE, GROUP, OPEN, SAVE
     }
 
     public enum DrawTools {
@@ -65,6 +65,18 @@ public class DrawToolsPanel extends AlphaAnimationPanel implements ActionListene
             emitBtnClickedEvent(DrawButtons.DELETE);
             return;
         }
+        else if(source==groupBtn){
+            emitBtnClickedEvent(DrawButtons.GROUP);
+            return;
+        }
+        else if(source==openBtn){
+            emitBtnClickedEvent(DrawButtons.OPEN);
+            return;
+        }
+        else if(source==saveBtn){
+            emitBtnClickedEvent(DrawButtons.SAVE);
+            return;
+        }
 
         DrawTools s;
         if (source==createBtn) s = DrawTools.CREATE;
@@ -81,6 +93,9 @@ public class DrawToolsPanel extends AlphaAnimationPanel implements ActionListene
     private JToggleButton moveBtn;
     private JToggleButton rotateBtn;
     private JButton deleteBtn;
+    private JButton groupBtn;
+    private JButton openBtn;
+    private JButton saveBtn;
     private JButton exitBtn;
 
     public static void main(String[] args) {
@@ -99,7 +114,11 @@ public class DrawToolsPanel extends AlphaAnimationPanel implements ActionListene
         moveBtn = toggleButtonBuilder("移动", "/drawTools/move.png");
         rotateBtn = toggleButtonBuilder("旋转", "/drawTools/rotate.png");
         BlankFactory();
+        groupBtn = buttonBuilder("组合", "/drawTools/group.png");
         deleteBtn = buttonBuilder("删除", "/drawTools/delete.png");
+        BlankFactory();
+        openBtn =  buttonBuilder("打开", "/drawTools/open.png");
+        saveBtn =  buttonBuilder("保存", "/drawTools/save.png");
         exitBtn = buttonBuilder("退出", "/drawTools/exit.png");
 
         this.setOpaque(false);
