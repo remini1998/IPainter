@@ -1,30 +1,6 @@
 # IPainter
 A Painter for the course practice of Java
-
-Lab4：
-√视觉设计 & 友好直观的操作  
-√工具选择  
-√鼠标图片更改  
-√辅助作图  
-√Java界面库的使用——50像素问题  
-√文件结构  
-√半透明、动画  
-√多层重叠  
-√Tree的渲染更改  
-√自定义组件ColorComponent  
-√状态模式
-
-Lab5：
-√分堆绘制：图形堆、临时堆  
-√组件化  
-√自定义事件监听  
-√策略模式  
-√对结构的扩展    
-√Maven工程的构建 + 图片资源的打包  
-√读取写入文件拓展名设置  
-
-
-Lab6 适配器模式
+![preview](https://raw.githubusercontent.com/remini1998/IPainter/master/md-imgs/main.png)
 
 
 TODO:  
